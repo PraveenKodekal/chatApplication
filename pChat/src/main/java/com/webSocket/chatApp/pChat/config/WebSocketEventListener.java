@@ -20,35 +20,25 @@ import lombok.extern.slf4j.Slf4j;
  *  
  *
  */
-
 @Component
-@RequiredArgsConstructor
-// log the message when the participant leave the chat
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketEventListener {
-	
-	private final SimpMessageSendingOperations messageTemplate;
-	
-	@EventListener
-	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-		
-		StompHeaderAccessor accessor=StompHeaderAccessor.wrap(event.getMessage());
-		String username=(String) accessor.getSessionAttributes().get("username");
-		
-		if(username!=null) {
-			log.info("User Disconnected : {}",username);
-			var message=ChatMessage.builder()
-									.type(MessageType.LEAVE)
-									.sender(username)
-									.build();
-			messageTemplate.convertAndSend("/topic/public",message);
-			
-		}
-		
-		
-		
-		
-	}
 
-	
+    private final SimpMessageSendingOperations messagingTemplate;
+
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        if (username != null) {
+            log.info("user disconnected: {}", username);
+            var chatMessage = ChatMessage.builder()
+                    .type(MessageType.LEAVE)
+                    .sender(username)
+                    .build();
+            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+        }
+    }
+
 }

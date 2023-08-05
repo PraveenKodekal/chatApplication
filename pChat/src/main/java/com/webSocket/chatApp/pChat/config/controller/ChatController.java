@@ -11,37 +11,22 @@ import com.webSocket.chatApp.pChat.model.ChatMessage;
 @Controller
 public class ChatController {
 
-	// method
-	// method to add user
-	// if it is a http request for rest api calls we use request body
-	// since it is a web socket we use payLoad
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public ChatMessage sendMessage(
+            @Payload ChatMessage chatMessage
+    ) {
+        return chatMessage;
+    }
 
-	
-	// @Message Mapping -- Message Mapping tells what is the url to invoke the method
-	// @SendTo-- where to ehen to send the message(to which topic to which user
-
-	
-	@MessageMapping("chat.sendMessage")
-	@SendTo("/tpopic/public")
-	public ChatMessage sendMsg(@Payload ChatMessage message) {
-		
-		
-		return message;
-		
-	}
-	
-	@MessageMapping("chat.addUser")
-	@SendTo("/tpopic/public")
-	public ChatMessage user(@Payload ChatMessage message, SimpMessageHeaderAccessor header) {
-		// add username web socket session
-		header.getSessionAttributes().put("username", message.getSender());
-		
-		
-		return message;
-	}
-	
-	
-	// method to send message
-	
-	
+    @MessageMapping("/chat.addUser")
+    @SendTo("/topic/public")
+    public ChatMessage addUser(
+            @Payload ChatMessage chatMessage,
+            SimpMessageHeaderAccessor headerAccessor
+    ) {
+        // Add username in web socket session
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
+    }
 }

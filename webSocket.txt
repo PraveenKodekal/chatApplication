@@ -1,0 +1,69 @@
+WEb socket
+	Web socket is communication protocal which provides duplex communication channels over a single TCP connevtions.
+It is designed to implemnted in web browsers and web servers,
+It can be used for any client application
+
+Web socket provide persistent connection between client and servers 
+that both parties can share data at any time
+
+Advantages
+
+Real Time Data Transfer
+Bi-Directional 
+Effiecient
+Persistent connection 
+
+RealTime Application
+Chat Applications
+Real-Time Gaming
+Collabarative editing
+Live Updates
+IoT (Internet Of Things)
+
+
+Handshake
+Handshake is the initial process to establish the connection between server sndd the client.
+ws uses http upgrade system to change the http protocal to some other protocal
+
+1. client sends the standard http request with specific header data to establishing authetinticating the web socket upgrade to get the connection to the server.
+2. So the relevant header will do http ugrade / socket upgrade to essentially asking the server to upgrsde the connection from http to web socket
+3. request also includes secret socket key which 64  digit encoded randomanisation value has to use from response
+4. if the server supports  web socket protocal it returns the standard http resp with standard response 101.
+5. which is swithching and upgrading the protocal from http to web socket
+6. it resp secure web socket accepy header which is hash of client secured web socket key along with the sprc uid clientchecks and validates the connection
+7. After this handshake process http protocal upgraded to web socket connection.
+
+chat application
+spring boot html spring boot js
+web socket mesage broker will play the role of broker that will be recieving the info from diffrent user and that will send to other user
+
+spring version 3.0.7
+java 17
+
+web
+web socket
+lombock
+
+1. config class
+
+@Config
+@EnableWebSocketMesageBroker
+public class WebSocket config implements WebSocketMessa{
+
+// two default methods
+
+1. registerStompEndPoints()
+2. configureWebSocketTransport()
+
+
+2. config event listener i want to listen all session disconnet event, means each time user disconnect from session we need to other user of application.
+	eg. x is left the chat
+
+WebSocketEventListener
+{
+
+	public void handleWebSocketDiscEvent(SessionDisconnectEvent event){
+		
+}
+}
+
